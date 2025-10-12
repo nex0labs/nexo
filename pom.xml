@@ -7,7 +7,7 @@
 
     <groupId>com.nexo</groupId>
     <artifactId>nexo</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Nexo</name>
@@ -282,17 +282,10 @@
         </license>
     </licenses>
 
-    <developers>
-        <developer>
-            <id>nexo-team</id>
-            <name>Nexo Development Team</name>
-            <email>dev@nexo.com</email>
-        </developer>
-    </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/nexo/nexo.git</connection>
-        <developerConnection>scm:git:ssh://github.com:nexo/nexo.git</developerConnection>
-        <url>http://github.com/nexo/nexo/tree/main</url>
+        <connection>scm:git:git://github.com/nex0labs/nexo.git</connection>
+        <developerConnection>scm:git:ssh://github.com:nex0labs/nexo.git</developerConnection>
+        <url>http://github.com/nex0labs/nexo/tree/main</url>
     </scm>
 </project>

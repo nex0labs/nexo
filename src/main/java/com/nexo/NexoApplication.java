@@ -69,7 +69,6 @@ public class NexoApplication {
                   }));
 
       app.start();
-
       Thread.currentThread().join();
 
     } catch (Exception e) {

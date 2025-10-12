@@ -1,5 +1,6 @@
 package com.nexo.tantivy.schema;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -13,8 +14,13 @@ public final class FieldOptions {
   @JsonProperty("index_record_option")
   private final String indexRecordOption;
 
+  @JsonCreator
   public FieldOptions(
-      Boolean index, Boolean store, Boolean fast, String tokenizer, String indexRecordOption) {
+      @JsonProperty("index") Boolean index,
+      @JsonProperty("store") Boolean store,
+      @JsonProperty("fast") Boolean fast,
+      @JsonProperty("tokenizer") String tokenizer,
+      @JsonProperty("index_record_option") String indexRecordOption) {
     this.index = index;
     this.store = store;
     this.fast = fast;

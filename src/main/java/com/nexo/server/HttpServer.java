@@ -60,7 +60,7 @@ public class HttpServer {
                   pipeline.addLast(
                       "aggregator", new HttpObjectAggregator(config.getMaxContentLength()));
                   pipeline.addLast("chunkedWriter", new ChunkedWriteHandler());
-                  pipeline.addLast("handler", new HttpRequestHandler(config));
+                  pipeline.addLast("handler", new HttpRequestHandler());
                 }
               });
 

@@ -1,9 +1,7 @@
 package com.nexo.server;
 
-import com.nexo.config.NexoConfig;
-import com.nexo.controller.CollectionController;
-import com.nexo.controller.HomeController;
-import com.nexo.router.RequestRouter;
+import com.nexo.api.collection.CollectionController;
+import com.nexo.api.home.HomeController;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpRequest;
@@ -12,31 +10,24 @@ import org.slf4j.LoggerFactory;
 
 public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
   private static final Logger logger = LoggerFactory.getLogger(HttpRequestHandler.class);
-  private static final HomeController HEALTH_CONTROLLER = new HomeController();
-  private static final CollectionController COLLECTION_CONTROLLER = new CollectionController();
-  private static final RequestRouter ROUTER = createRouter();
+  private static final RequestRouter ROUTER = initRouter();
 
-  private static RequestRouter createRouter() {
+  private static RequestRouter initRouter() {
     RequestRouter router = new RequestRouter();
-    router.registerController(HEALTH_CONTROLLER);
-    router.registerController(COLLECTION_CONTROLLER);
-    logger.info("Initialized routes: {}", router.getRegisteredRoutes());
+    router.registerController(new HomeController());
+    router.registerController(new CollectionController());
+    logger.info("Registered routes: {}", router.getRegisteredRoutes());
     return router;
   }
 
-  public HttpRequestHandler(NexoConfig config) {}
-
   @Override
   protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) {
-    if (logger.isDebugEnabled()) {
-      logger.debug("Received {} request for {}", request.method(), request.uri());
-    }
     ROUTER.route(ctx, request);
   }
 
   @Override
   public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-    logger.error("Exception in HTTP handler", cause);
+    logger.error("Request handling error", cause);
     ctx.close();
   }
 }

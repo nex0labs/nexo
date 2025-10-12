@@ -1,4 +1,4 @@
-package com.nexo.annotation;
+package com.nexo.server.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

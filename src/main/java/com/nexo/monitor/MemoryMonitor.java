@@ -44,7 +44,7 @@ public class MemoryMonitor {
   }
 
   public MemoryMonitor() {
-    this(30); // Default 30 seconds
+    this(30);
   }
 
   public void start() {

@@ -1,205 +1,154 @@
-# Nexo Search Engine
+# 🚀 Nexo (Alpha)
 
-A robust, high-performance open-source search engine built with Java, Netty, and Apache Lucene. Nexo provides Elasticsearch-like REST API capabilities with focus on simplicity and performance.
+**Nexo** is an **alpha-stage high-performance search server** built with [Tantivy](https://github.com/quickwit-oss/tantivy) and **Java**, designed to **index and query large datasets in sub-seconds**.
 
-## Features
+> ⚠️ **Alpha Notice:**
+> Nexo is currently in **active development**. Expect breaking changes, incomplete features, and evolving APIs. Feedback and contributions are highly encouraged!
 
-- **High Performance**: Built on Netty for non-blocking I/O and optimized for high concurrency
-- **Full-Text Search**: Powered by Apache Lucene for advanced search capabilities
-- **REST API**: Elasticsearch-compatible HTTP API for easy integration
-- **Configurable**: YAML-based configuration with sensible defaults
-- **Robust**: Production-ready with comprehensive logging and error handling
-- **Lightweight**: Minimal dependencies and resource footprint
+---
 
-## Quick Start
+## 📚 Table of Contents
 
-### Prerequisites
+* [⚡ Features](#-features)
+* [🧩 Architecture Overview](#-architecture-overview)
+* [🚀 Quick Start](#-quick-start)
+* [🧠 Example Use Cases](#-example-use-cases)
+* [🛠️ Tech Stack](#️-tech-stack)
+* [📈 Performance](#-performance)
+* [🤝 Contributing](#-contributing)
+* [📄 License](#-license)
+* [🌟 Acknowledgments](#-acknowledgments)
 
-- Java 17 or higher
-- Maven 3.6+
+---
 
-### Building
+## ⚡ Features (in progress)
 
-```bash
-mvn clean compile
+* 🔍 **Ultra-fast full-text search** — powered by Tantivy’s Rust engine
+* 🧩 **Java API layer** — for easy integration and extension
+* ⚙️ **RESTful HTTP endpoints** — simple and language-agnostic
+* 🧠 **Custom analyzers & ranking** *(planned)*
+* 🗃️ **Persistent and concurrent indexing** *(in progress)*
+* 📊 **Efficient query execution** *(coming soon)*
+
+---
+
+## 🧩 Architecture Overview
+
+Nexo combines **Rust performance** with **Java's ecosystem** through an FFI (Foreign Function Interface) bridge, serving requests via **Netty's high-performance HTTP server**.
+
+```
+         ┌──────────────────────────────┐
+         │           Client             │
+         └─────────────┬────────────────┘
+                       │ HTTP/REST
+         ┌─────────────┴────────────────┐
+         │        Netty Server          │
+         │      (HTTP Handler)          │
+         └─────────────┬────────────────┘
+                       │
+         ┌─────────────┴────────────────┐
+         │          Nexo API            │
+         │       (Java Service)         │
+         └─────────────┬────────────────┘
+                       │ JNI / FFI
+         ┌─────────────┴────────────────┐
+         │       Tantivy Engine         │
+         │      (Rust Search Core)      │
+         └──────────────────────────────┘
 ```
 
-### Running
+---
+
+## 🚀 Quick Start
+
+### 1. Clone the repository
 
 ```bash
-# Using Maven
-mvn exec:java
-
-# Or using the JAR
-mvn package
-java -jar target/nexo-1.0.0-SNAPSHOT.jar
-
-# With custom configuration
-java -jar target/nexo-1.0.0-SNAPSHOT.jar config/nexo.yml
+git clone https://github.com/nex0labs/nexo.git
+cd nexo
 ```
 
-### Basic Usage
-
-#### 1. Health Check
+### 2. Build the project
 
 ```bash
+mvn clean package
+```
+
+### 3. Run the server
+
+```bash
+java -jar target/nexo-0.1.0-SNAPSHOT.jar
+```
+
+### 4. Try it out
+
+```bash
+# Check server health
 curl http://localhost:9090/
+
+# Create a collection
+curl -X POST http://localhost:9090/collections/ \
+     -H "Content-Type: application/json" \
+     -d '{"name": "my_collection", "schema": {}}'
 ```
 
-Response:
-```json
-{
-  "status": "ok",
-  "version": "1.0.0",
-  "timestamp": 1699123456789
-}
-```
+---
 
-#### 2. Index a Document
+## 🧠 Example Use Cases
 
-```bash
-curl -X POST http://localhost:9090/_index \
-  -H "Content-Type: application/json" \
-  -d '{
-    "title": "Getting Started with Nexo",
-    "content": "Nexo is a powerful search engine built with Java and Netty",
-    "author": "Nexo Team",
-    "tags": ["search", "java", "netty"]
-  }'
-```
+* 🔎 Document, log, or dataset search
+* 🛍️ Product or metadata indexing for e-commerce
+* 📊 Fast analytics and exploration tools
+* 🧩 Embedded local search for Java applications
 
-Response:
-```json
-{
-  "indexed": true,
-  "id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-  "timestamp": 1699123456789
-}
-```
+---
 
-#### 3. Search Documents
+## 🛠️ Tech Stack
 
-```bash
-curl -X POST http://localhost:9090/_search \
-  -H "Content-Type: application/json" \
-  -d '{
-    "query": "search engine",
-    "size": 10,
-    "from": 0
-  }'
-```
+| Component          | Technology                                                |
+| ------------------ | --------------------------------------------------------- |
+| Core Search Engine | [Tantivy (Rust)](https://github.com/quickwit-oss/tantivy) |
+| HTTP Server        | [Netty](https://netty.io/)                                |
+| API Layer          | Java 21+                                                  |
+| Build Tool         | Maven                                                     |
+| Integration        | REST / JSON API                                           |
 
-Response:
-```json
-{
-  "hits": [
-    {
-      "id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-      "score": 1.2345,
-      "source": {
-        "title": "Getting Started with Nexo",
-        "content": "Nexo is a powerful search engine built with Java and Netty",
-        "author": "Nexo Team"
-      }
-    }
-  ],
-  "totalHits": 1,
-  "took": 5
-}
-```
+---
 
-#### 4. Get Statistics
+## 📈 Performance
 
-```bash
-curl http://localhost:9090/_stats
-```
+Nexo’s architecture targets **sub-second search latency** even on large indexes, leveraging Tantivy’s optimized data structures.
+⚠️ Performance tuning and benchmark reports will be available in later releases.
 
-Response:
-```json
-{
-  "totalDocuments": 1,
-  "indexedDocuments": 1,
-  "indexPath": "data/index",
-  "timestamp": 1699123456789
-}
-```
+---
 
-## Configuration
+## 🤝 Contributing
 
-Edit `config/nexo.yml` to customize settings:
-
-```yaml
-serverHost: "0.0.0.0"
-serverPort: 9090
-workerThreads: 4
-searchThreads: 4
-maxContentLength: 1048576  # 1MB
-indexPath: "data/index"
-clusterName: "nexo-cluster"
-nodeName: "nexo-node-1"
-```
-
-## API Reference
-
-### Endpoints
-
-- `GET /` - Health check
-- `POST /_index` - Index a document
-- `POST /_search` - Search documents
-- `GET /_stats` - Get cluster statistics
-
-### Search Query Parameters
-
-- `query` (string): Lucene query syntax
-- `size` (int): Number of results to return (default: 10, max: 10000)
-- `from` (int): Starting offset (default: 0)
-- `fields` (array): Fields to include in response (default: all)
-
-## Development
-
-### Running Tests
-
-```bash
-mvn test
-```
-
-### Building Distribution
-
-```bash
-mvn package
-```
-
-## Architecture
-
-Nexo is built with a modular architecture:
-
-- **Server Layer**: Netty-based HTTP server with async request handling
-- **Core Engine**: Lucene-powered search and indexing
-- **Configuration**: YAML-based configuration management
-- **Utilities**: Logging, error handling, and monitoring
-
-## Performance
-
-Nexo is optimized for:
-
-- High concurrent connections via Netty's event loop
-- Fast indexing with configurable commit strategies
-- Efficient memory usage with Lucene's index management
-- Low latency search with connection pooling
-
-## License
-
-Apache License 2.0
-
-## Contributing
+Nexo is in its **alpha stage**, and we’d love your feedback!
 
 1. Fork the repository
-2. Create a feature branch
+2. Create a feature branch (`git checkout -b feature/new-feature`)
 3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+4. Push to your fork and open a Pull Request
 
-## Support
+---
 
-- GitHub Issues: https://github.com/nexo/nexo/issues
-- Documentation: https://github.com/nexo/nexo/wiki
+## 📄 License
+
+**Nexo** is licensed under the **Apache License 2.0**.
+See the [LICENSE](LICENSE) file for full details.
+
+```
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+```
+
+---
+
+## 🌟 Acknowledgments
+
+* [Tantivy](https://github.com/quickwit-oss/tantivy) — powering Nexo’s search core
+* The open-source community for ideas, contributions, and inspiration

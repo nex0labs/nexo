@@ -1,4 +1,4 @@
-package com.nexo.annotation;
+package com.nexo.server.annotation;
 
 public enum HttpMethod {
   GET,

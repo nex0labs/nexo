@@ -16,7 +16,7 @@ public class NexoConfig {
   private static final Logger logger = LoggerFactory.getLogger(NexoConfig.class);
 
   private String serverHost = "0.0.0.0";
-  private int serverPort = 9200;
+  private int serverPort = 9090;
   private int workerThreads = Runtime.getRuntime().availableProcessors();
   private int searchThreads = Runtime.getRuntime().availableProcessors();
   private int maxContentLength = 1048576;

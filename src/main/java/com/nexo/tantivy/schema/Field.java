@@ -1,28 +1,32 @@
 package com.nexo.tantivy.schema;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Getter
+@Setter
+@NoArgsConstructor
 public class Field {
 
-  private final String name;
+  private String name;
 
-  private final FieldOptions options;
+  private FieldOptions options;
 
-  private final FieldType type;
+  private FieldType type;
 
-  public Field(String name, FieldType type, FieldOptions options) {
+  @JsonCreator
+  public Field(
+      @JsonProperty("name") String name,
+      @JsonProperty("type") FieldType type,
+      @JsonProperty("options") FieldOptions options) {
     this.name = name;
     this.type = type;
     this.options = copyFieldOptions(options);
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public FieldType getType() {
-    return type;
   }
 
   public FieldOptions getOptions() {
@@ -33,13 +37,11 @@ public class Field {
     if (original == null) {
       return null;
     }
-    FieldOptions copy =
-        new FieldOptions(
-            original.getIndex(),
-            original.getStore(),
-            original.getFast(),
-            original.getTokenizer(),
-            original.getIndexRecordOption());
-    return copy;
+    return new FieldOptions(
+        original.getIndex(),
+        original.getStore(),
+        original.getFast(),
+        original.getTokenizer(),
+        original.getIndexRecordOption());
   }
 }
