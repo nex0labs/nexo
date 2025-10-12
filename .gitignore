@@ -1,0 +1,79 @@
+# Compiled class files
+*.class
+
+# Log files
+*.log
+logs/
+
+# Package Files
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# IDE - IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# IDE - Eclipse
+.classpath
+.project
+.settings/
+bin/
+
+# IDE - VSCode
+.vscode/
+*.code-workspace
+.history/
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Rust
+src/main/rust/target/
+src/main/rust/Cargo.lock
+
+# Native libraries
+*.so
+*.dylib
+*.dll
+
+# Application config (if contains secrets)
+# config/local.yml
+# .env
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~.nib
+
+# Test coverage
+*.gcov
+*.gcda
+*.gcno
+
+.mvn
