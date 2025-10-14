@@ -17,12 +17,11 @@ import io.netty.util.CharsetUtil;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class RequestRouter {
 
-  private static final Logger logger = LoggerFactory.getLogger(RequestRouter.class);
   private static final ObjectMapper OBJECT_MAPPER = createOptimizedObjectMapper();
 
   private final Map<String, RouteHandler> staticRoutes = new HashMap<>();
@@ -60,7 +59,7 @@ public class RequestRouter {
     Class<?> controllerClass = controller.getClass();
 
     if (!controllerClass.isAnnotationPresent(Controller.class)) {
-      logger.warn("Class {} is not annotated with @Controller", controllerClass.getName());
+      log.warn("Class {} is not annotated with @Controller", controllerClass.getName());
       return;
     }
 
@@ -118,7 +117,7 @@ public class RequestRouter {
           throw (NexoException) cause;
         }
 
-        logger.error("Error invoking controller method", cause);
+        log.error("Error invoking controller method", cause);
         throw NexoException.internalError("Error invoking controller method", cause);
       }
     };
@@ -132,10 +131,10 @@ public class RequestRouter {
     if (pattern.isStatic()) {
       String routeKey = createRouteKey(nettyMethod, path);
       staticRoutes.put(routeKey, handler);
-      logger.info("Registered static route: {}", pattern);
+      log.info("Registered static route: {}", pattern);
     } else {
       dynamicRoutes.add(new RouteEntry(pattern, handler));
-      logger.info("Registered dynamic route: {}", pattern);
+      log.info("Registered dynamic route: {}", pattern);
     }
   }
 
@@ -173,7 +172,7 @@ public class RequestRouter {
                 ? (NexoException) e
                 : NexoException.internalError("Internal server error", e);
 
-        logger.warn("Request handling error: {}", nexoException.getMessage(), e);
+        log.warn("Request handling error: {}", nexoException.getMessage(), e);
         sendError(ctx, nexoException, prettyPrint);
         return;
       }
@@ -196,7 +195,7 @@ public class RequestRouter {
                   ? (NexoException) e
                   : NexoException.internalError("Internal server error", e);
 
-          logger.warn("Request handling error: {}", nexoException.getMessage(), e);
+          log.warn("Request handling error: {}", nexoException.getMessage(), e);
           sendError(ctx, nexoException, prettyPrint);
           return;
         }
@@ -222,7 +221,7 @@ public class RequestRouter {
 
       ctx.writeAndFlush(response);
     } catch (Exception e) {
-      logger.error("Error serializing response", e);
+      log.error("Error serializing response", e);
       sendError(ctx, NexoException.internalError("Serialization error", e), prettyPrint);
     }
   }
@@ -250,7 +249,7 @@ public class RequestRouter {
 
       ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
     } catch (Exception e) {
-      logger.error("Error sending error response", e);
+      log.error("Error sending error response", e);
       ctx.close();
     }
   }

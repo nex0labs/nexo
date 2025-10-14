@@ -7,13 +7,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import lombok.Getter;
 import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Getter
 @Setter
 public class NexoConfig {
-  private static final Logger logger = LoggerFactory.getLogger(NexoConfig.class);
 
   private String serverHost = "0.0.0.0";
   private int serverPort = 9090;
@@ -31,12 +30,12 @@ public class NexoConfig {
       try {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         config = mapper.readValue(configPath.toFile(), NexoConfig.class);
-        logger.info("Configuration loaded from: {}", configPath);
+        log.info("Configuration loaded from: {}", configPath);
       } catch (IOException e) {
-        logger.warn("Failed to load configuration from {}, using defaults", configPath, e);
+        log.warn("Failed to load configuration from {}, using defaults", configPath, e);
       }
     } else {
-      logger.info("Configuration file not found at {}, using defaults", configPath);
+      log.info("Configuration file not found at {}, using defaults", configPath);
     }
 
     config.validate();
@@ -57,7 +56,7 @@ public class NexoConfig {
       maxContentLength = 1024;
     }
 
-    logger.info(
+    log.info(
         "Configuration validated: host={}, port={}, workers={}, searchThreads={}",
         serverHost,
         serverPort,

@@ -12,11 +12,10 @@ import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class HttpServer {
-  private static final Logger logger = LoggerFactory.getLogger(HttpServer.class);
 
   private final NexoConfig config;
   private EventLoopGroup bossGroup;
@@ -67,7 +66,7 @@ public class HttpServer {
       ChannelFuture future = bootstrap.bind(config.getServerHost(), config.getServerPort()).sync();
       serverChannel = future.channel();
 
-      logger.info("HTTP server bound to {}:{}", config.getServerHost(), config.getServerPort());
+      log.info("HTTP server bound to {}:{}", config.getServerHost(), config.getServerPort());
 
     } catch (Exception e) {
       shutdown();
@@ -81,7 +80,7 @@ public class HttpServer {
         serverChannel.close().sync();
       }
     } catch (InterruptedException e) {
-      logger.warn("Interrupted while closing server channel", e);
+      log.warn("Interrupted while closing server channel", e);
       Thread.currentThread().interrupt();
     } finally {
       shutdown();

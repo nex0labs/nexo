@@ -4,12 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import lombok.Getter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Getter
 public class VersionService {
-  private static final Logger logger = LoggerFactory.getLogger(VersionService.class);
 
   private static final String VERSION_PROPERTIES = "version.properties";
   private static final String DEFAULT_VERSION = "unknown";
@@ -27,7 +26,7 @@ public class VersionService {
     this.groupId = properties.getProperty("group.id", "com.nexo");
     this.buildTimestamp = properties.getProperty("build.timestamp", "unknown");
 
-    logger.info("Loaded version info: {} v{}", artifactId, version);
+    log.info("Loaded version info: {} v{}", artifactId, version);
   }
 
   private Properties loadVersionProperties() {
@@ -36,15 +35,15 @@ public class VersionService {
     try (InputStream inputStream =
         getClass().getClassLoader().getResourceAsStream(VERSION_PROPERTIES)) {
       if (inputStream == null) {
-        logger.warn("Version properties file not found: {}", VERSION_PROPERTIES);
+        log.warn("Version properties file not found: {}", VERSION_PROPERTIES);
         return properties;
       }
 
       properties.load(inputStream);
-      logger.debug("Successfully loaded version properties");
+      log.debug("Successfully loaded version properties");
 
     } catch (IOException e) {
-      logger.error("Failed to load version properties", e);
+      log.error("Failed to load version properties", e);
     }
 
     return properties;

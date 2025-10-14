@@ -9,6 +9,20 @@ public class NexoException extends RuntimeException {
   private final HttpResponseStatus status;
   private final String errorCode;
 
+  public NexoException(String message) {
+    super(message);
+    this.errorType = ErrorType.INTERNAL_ERROR;
+    this.status = HttpResponseStatus.INTERNAL_SERVER_ERROR;
+    this.errorCode = "INTERNAL_ERROR";
+  }
+
+  public NexoException(String message, Throwable cause) {
+    super(message, cause);
+    this.errorType = ErrorType.INTERNAL_ERROR;
+    this.status = HttpResponseStatus.INTERNAL_SERVER_ERROR;
+    this.errorCode = "INTERNAL_ERROR";
+  }
+
   public NexoException(ErrorType errorType, String message) {
     super(message);
     this.errorType = errorType;

@@ -2,7 +2,7 @@
 mod tests {
 
     use crate::tests::test_utils::{get_temp_path, json_schema, TEST_SCHEMA};
-    use crate::{create_index, delete_index, open_index};
+    use crate::{index::create_index, index::delete_index, index::open_index};
     use serial_test::serial;
 
     #[test]
