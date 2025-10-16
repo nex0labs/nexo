@@ -77,3 +77,4 @@ src/main/rust/Cargo.lock
 *.gcno
 
 .mvn
+data/

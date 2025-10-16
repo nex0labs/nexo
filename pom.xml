@@ -52,6 +52,11 @@
             <artifactId>jackson-dataformat-yaml</artifactId>
             <version>${jackson.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.yaml</groupId>
@@ -252,18 +257,38 @@
                         </goals>
                         <configuration>
                             <target>
-                                <copy todir="${project.build.directory}/classes" flatten="true" failonerror="false">
+                                <mkdir dir="${project.build.directory}/classes/native/mac-aarch64"/>
+                                <copy todir="${project.build.directory}/classes/native/mac-aarch64" failonerror="false" flatten="true">
                                     <fileset dir="${project.basedir}/src/main/rust/target/release">
-                                        <include name="libnexo_native.so"/>
-                                        <include name="libnexo_native.dylib"/>
-                                        <include name="nexo_native.dll"/>
+                                        <include name="libtantivy4j.dylib"/>
                                     </fileset>
                                 </copy>
+
+                                <mkdir dir="${project.build.directory}/classes/native/mac-x86_64"/>
+                                <copy todir="${project.build.directory}/classes/native/mac-x86_64" failonerror="false" flatten="true">
+                                    <fileset dir="${project.basedir}/src/main/rust/target/release">
+                                        <include name="libtantivy4j.dylib"/>
+                                    </fileset>
+                                </copy>
+
+                                <mkdir dir="${project.build.directory}/classes/native/linux-x86_64"/>
+                                <copy todir="${project.build.directory}/classes/native/linux-x86_64" failonerror="false" flatten="true">
+                                    <fileset dir="${project.basedir}/src/main/rust/target/release">
+                                        <include name="libtantivy4j.so"/>
+                                    </fileset>
+                                </copy>
+
+                                <mkdir dir="${project.build.directory}/classes/native/linux-aarch64"/>
+                                <copy todir="${project.build.directory}/classes/native/linux-aarch64" failonerror="false" flatten="true">
+                                    <fileset dir="${project.basedir}/src/main/rust/target/release">
+                                        <include name="libtantivy4j.so"/>
+                                    </fileset>
+                                </copy>
+
                                 <copy todir="${project.build.directory}" flatten="true" failonerror="false">
                                     <fileset dir="${project.basedir}/src/main/rust/target/release">
-                                        <include name="libnexo_native.so"/>
-                                        <include name="libnexo_native.dylib"/>
-                                        <include name="nexo_native.dll"/>
+                                        <include name="libtantivy4j.so"/>
+                                        <include name="libtantivy4j.dylib"/>
                                     </fileset>
                                 </copy>
                             </target>

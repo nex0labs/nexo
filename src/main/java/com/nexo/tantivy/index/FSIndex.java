@@ -1,8 +1,8 @@
-package com.nexo.tantivy;
+package com.nexo.tantivy.index;
 
 import com.nexo.tantivy.utils.LoadNativeLibrary;
 
-public class FSDirectory {
+public class FSIndex implements TantivyIndex {
 
   static {
     try {

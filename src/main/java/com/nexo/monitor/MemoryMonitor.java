@@ -10,11 +10,10 @@ import io.micrometer.jmx.JmxMeterRegistry;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class MemoryMonitor {
-  private static final Logger logger = LoggerFactory.getLogger(MemoryMonitor.class);
   private static final long KB = 1024;
   private static final long MB = 1024 * 1024;
   private static final long GB = 1024 * 1024 * 1024;
@@ -48,13 +47,13 @@ public class MemoryMonitor {
   }
 
   public void start() {
-    logger.info("Starting memory monitor with {}s interval", intervalSeconds);
+    log.info("Starting memory monitor with {}s interval", intervalSeconds);
     scheduler.scheduleAtFixedRate(
         this::logMemoryStats, intervalSeconds, intervalSeconds, TimeUnit.SECONDS);
   }
 
   public void stop() {
-    logger.info("Stopping memory monitor");
+    log.info("Stopping memory monitor");
     scheduler.shutdown();
     try {
       if (!scheduler.awaitTermination(5, TimeUnit.SECONDS)) {
@@ -69,7 +68,7 @@ public class MemoryMonitor {
   }
 
   private void logMemoryStats() {
-    if (!logger.isInfoEnabled()) {
+    if (!log.isInfoEnabled()) {
       return;
     }
 
@@ -91,7 +90,7 @@ public class MemoryMonitor {
         // CPU metric not available
       }
 
-      logger.info(
+      log.info(
           "Memory Stats: heap=[used={}, max={}] nonHeap=[used={}] threads={} cpu={}",
           formatBytes(heapUsed),
           formatBytes(heapMax),
@@ -99,7 +98,7 @@ public class MemoryMonitor {
           threadCount,
           cpuInfo);
     } catch (Exception e) {
-      logger.warn("Error collecting memory statistics", e);
+      log.warn("Error collecting memory statistics", e);
     }
   }
 
