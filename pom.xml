@@ -117,6 +117,8 @@
             <groupId>com.unum.usearch</groupId>
             <artifactId>usearch</artifactId>
             <version>${usearch.version}</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/usearch-${usearch.version}.jar</systemPath>
         </dependency>
     </dependencies>
 
