@@ -1,7 +1,7 @@
-package com.nexo.tantivy;
+package com.nexo.core;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.nexo.tantivy.utils.LoadNativeLibrary;
+import com.nexo.core.utils.LoadNativeLibrary;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;

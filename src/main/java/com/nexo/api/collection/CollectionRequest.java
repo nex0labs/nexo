@@ -1,6 +1,6 @@
 package com.nexo.api.collection;
 
-import com.nexo.tantivy.schema.Field;
+import com.nexo.core.schema.Field;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;

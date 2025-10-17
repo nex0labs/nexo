@@ -9,7 +9,7 @@ use crate::jni_utils::{convert_index_error, throw_java_exception, validate_path}
 
 #[no_mangle]
 #[allow(non_snake_case)]
-pub extern "system" fn Java_com_nexo_tantivy_index_FSIndex_createIndexNative(
+pub extern "system" fn Java_com_nexo_core_index_TantivyIndex_createIndexNative(
     mut env: JNIEnv,
     _class: JClass,
     index_path: JString,
@@ -54,7 +54,7 @@ pub extern "system" fn Java_com_nexo_tantivy_index_FSIndex_createIndexNative(
 
 #[no_mangle]
 #[allow(non_snake_case)]
-pub extern "system" fn Java_com_nexo_tantivy_index_FSIndex_deleteIndexNative(
+pub extern "system" fn Java_com_nexo_core_index_TantivyIndex__deleteIndexNative(
     mut env: JNIEnv,
     _class: JClass,
     index_path: JString,
@@ -83,7 +83,7 @@ pub extern "system" fn Java_com_nexo_tantivy_index_FSIndex_deleteIndexNative(
 
 #[no_mangle]
 #[allow(non_snake_case)]
-pub extern "system" fn Java_com_nexo_tantivy_index_FSIndex_indexExistsNative(
+pub extern "system" fn Java_com_nexo_core_index_TantivyIndex__indexExistsNative(
     mut env: JNIEnv,
     _class: JClass,
     index_path: JString,
@@ -109,7 +109,7 @@ pub extern "system" fn Java_com_nexo_tantivy_index_FSIndex_indexExistsNative(
 }
 
 #[no_mangle]
-pub extern "system" fn Java_com_nexo_tantivy_index_FSIndex_openIndexNative(
+pub extern "system" fn Java_com_nexo_core_index_TantivyIndex__openIndexNative(
     mut env: JNIEnv,
     _class: JClass,
     index_path: JString,

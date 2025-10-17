@@ -1,4 +1,4 @@
-package com.nexo.tantivy.utils;
+package com.nexo.core.utils;
 
 import java.io.IOException;
 import java.io.InputStream;

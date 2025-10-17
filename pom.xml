@@ -19,15 +19,16 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <netty.version>4.1.115.Final</netty.version>
+        <netty.version>4.2.7.Final</netty.version>
         <jackson.version>2.18.1</jackson.version>
         <junit.version>5.11.3</junit.version>
         <mockito.version>5.14.2</mockito.version>
         <snakeyaml.version>2.3</snakeyaml.version>
         <slf4j.version>2.0.16</slf4j.version>
-        <logback.version>1.5.13</logback.version>
+        <logback.version>1.5.19</logback.version>
         <lombok.version>1.18.36</lombok.version>
         <micrometer.version>1.14.2</micrometer.version>
+        <usearch.version>2.21.1</usearch.version>
     </properties>
 
     <dependencies>
@@ -111,10 +112,59 @@
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.unum.usearch</groupId>
+            <artifactId>usearch</artifactId>
+            <version>${usearch.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>com.googlecode.maven-download-plugin</groupId>
+                <artifactId>download-maven-plugin</artifactId>
+                <version>1.9.0</version>
+                <executions>
+                    <execution>
+                        <id>download-usearch</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <configuration>
+                            <url>https://github.com/unum-cloud/usearch/releases/download/v${usearch.version}/usearch-${usearch.version}.jar</url>
+                            <outputDirectory>${project.basedir}/lib</outputDirectory>
+                            <outputFileName>usearch-${usearch.version}.jar</outputFileName>
+                            <skipCache>false</skipCache>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>install-usearch</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <file>${project.basedir}/lib/usearch-${usearch.version}.jar</file>
+                            <groupId>com.unum.usearch</groupId>
+                            <artifactId>usearch</artifactId>
+                            <version>${usearch.version}</version>
+                            <packaging>jar</packaging>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>

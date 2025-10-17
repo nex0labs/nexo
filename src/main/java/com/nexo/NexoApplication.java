@@ -1,5 +1,7 @@
 package com.nexo;
 
+import static com.nexo.config.NexoConfig.CONFIG_FILE_PATH;
+
 import com.nexo.config.NexoConfig;
 import com.nexo.monitor.MemoryMonitor;
 import com.nexo.server.HttpServer;
@@ -46,11 +48,7 @@ public class NexoApplication {
     try {
       log.info("Initializing Nexo Search Engine...");
 
-      //      logger.info("Loading native library...");
-      //      LoadNativeLibrary.load();
-      //      logger.info("Native library loaded successfully");
-
-      String configPath = args.length > 0 ? args[0] : "config/nexo.yml";
+      String configPath = args.length > 0 ? args[0] : CONFIG_FILE_PATH;
       if (configPath.isBlank()) {
         log.error("Configuration not found,make sure the nexo.yaml file is present");
         System.exit(1);

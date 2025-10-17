@@ -1,4 +1,4 @@
-package com.nexo.tantivy.schema;
+package com.nexo.core.schema;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;

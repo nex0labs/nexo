@@ -1,6 +1,6 @@
 package com.nexo.collection;
 
-import com.nexo.tantivy.IndexWriter;
+import com.nexo.core.IndexWriter;
 import lombok.Getter;
 
 @Getter

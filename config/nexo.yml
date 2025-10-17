@@ -6,3 +6,17 @@ maxContentLength: 1048576
 indexPath: "data/index"
 clusterName: "nexo-cluster"
 nodeName: "nexo-node-1"
+
+vectorIndex:
+  dimension: 1024
+  metric: "cos"
+  connectivity: 16
+  expansionAdd: 200
+  expansionSearch: 200
+  quantization: "f32"
+
+keywordIndex:
+  defaultAnalyzer: "standard"
+  stemming: true
+  stopWords: true
+  caseSensitive: false
