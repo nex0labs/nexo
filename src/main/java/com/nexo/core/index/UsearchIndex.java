@@ -30,12 +30,12 @@ public class UsearchIndex {
       throw new IllegalArgumentException("Index path cannot be null or empty");
     }
 
-    Index newIndex = null;
+    Index vectorIndex = null;
     try {
       this.indexPath = Paths.get(indexPathStr);
       Files.createDirectories(this.indexPath.getParent());
 
-      newIndex =
+      vectorIndex =
           new Index.Config()
               .dimensions(config.getDimension())
               .metric(config.getMetric())
@@ -45,19 +45,19 @@ public class UsearchIndex {
               .expansion_search(config.getExpansionSearch())
               .build();
 
-      newIndex.save(indexPathStr);
+      vectorIndex.save(indexPathStr);
       log.info("Created USearch index at: {}", indexPathStr);
 
-      this.index = newIndex;
-      newIndex = null;
+      this.index = vectorIndex;
+      vectorIndex = null;
       return true;
     } catch (Exception e) {
       log.error("Error creating USearch index: {}", e.getMessage(), e);
       return false;
     } finally {
-      if (newIndex != null) {
+      if (vectorIndex != null) {
         try {
-          newIndex.close();
+          vectorIndex.close();
         } catch (Exception e) {
           log.warn("Error closing temporary index: {}", e.getMessage());
         }

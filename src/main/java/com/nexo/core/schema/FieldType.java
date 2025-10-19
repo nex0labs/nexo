@@ -8,7 +8,10 @@ public enum FieldType {
   F64("f64"),
   BYTES("bytes"),
   U64("u64"),
-  DATE("date");
+  DATE("date"),
+  VECTOR("vector"),
+  BOOL("bool");
+
   private final String name;
 
   FieldType(String name) {

@@ -16,7 +16,7 @@ use crate::jni_utils::{throw_java_exception, validate_path};
 
 //Document Processing
 #[no_mangle]
-pub extern "system" fn Java_com_nexo_core_IndexWriter_writerNative(
+pub extern "system" fn Java_com_nexo_core_index_TantivyIndex_writerNative(
     mut env: JNIEnv,
     _class: JClass,
     index_path: JString,
@@ -44,7 +44,7 @@ pub extern "system" fn Java_com_nexo_core_IndexWriter_writerNative(
 }
 
 #[no_mangle]
-pub extern "system" fn Java_com_nexo_core_IndexWriter_addDocumentNative(
+pub extern "system" fn Java_com_nexo_core_index_TantivyIndex_addDocumentNative(
     mut env: JNIEnv,
     _class: jni::objects::JClass,
     handle: jlong,
@@ -76,7 +76,7 @@ pub extern "system" fn Java_com_nexo_core_IndexWriter_addDocumentNative(
 }
 
 #[no_mangle]
-pub extern "system" fn Java_com_nexo_core_IndexWriter_commitWriterNative(
+pub extern "system" fn Java_com_nexo_core_index_TantivyIndex_commitWriterNative(
     env: JNIEnv,
     _class: JClass,
     handle: jlong,
@@ -95,7 +95,7 @@ pub extern "system" fn Java_com_nexo_core_IndexWriter_commitWriterNative(
     }
 }
 #[no_mangle]
-pub extern "system" fn Java_com_nexo_core_IndexWriter_closeWriterNative(
+pub extern "system" fn Java_com_nexo_core_index_TantivyIndex_closeWriterNative(
     _env: JNIEnv,
     _class: jni::objects::JClass,
     handle: jlong,

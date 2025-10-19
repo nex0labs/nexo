@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.nexo.core.IndexWriter;
 import com.nexo.core.index.TantivyIndex;
 import com.nexo.core.index.UsearchIndex;
 import com.nexo.core.schema.SchemaBuilder;
@@ -71,18 +70,24 @@ public class CollectionManager {
         try {
           String collectionId = collectionDir.getFileName().toString();
           Path keywordIndexPath = getKeywordIndexPath(collectionId);
+          Path vectorIndexPath = getVectorIndexPath(collectionId);
 
           if (!Files.exists(keywordIndexPath)) {
             log.warn("Keyword index missing for collection: {}, skipping", collectionId);
             failedCount++;
             continue;
           }
+          if (!Files.exists(vectorIndexPath)) {
+            log.warn("Vector index missing for collection: {}, skipping", collectionId);
+            failedCount++;
+            continue;
+          }
 
           CollectionMetadata metadata = loadCollectionMetadata(collectionDir);
           CollectionName name = CollectionName.of(metadata.getName());
-          IndexWriter indexWriter = new IndexWriter(keywordIndexPath.toString());
-          Collection collection =
-              new Collection(keywordIndexPath.toString(), metadata, indexWriter);
+          TantivyIndex tantivyIndex = new TantivyIndex(keywordIndexPath);
+          UsearchIndex usearchIndex = new UsearchIndex();
+          Collection collection = new Collection(metadata, tantivyIndex, usearchIndex);
           collections.put(name, collection);
 
           loadedCount++;
@@ -128,14 +133,13 @@ public class CollectionManager {
     Path keywordIndexPath = getKeywordIndexPath(collectionId);
     Path vectorIndexPath = getVectorIndexPath(collectionId);
 
-    TantivyIndex tantivyIndex = new TantivyIndex();
     UsearchIndex usearchIndex = new UsearchIndex();
+    TantivyIndex tantivyIndex = new TantivyIndex(keywordIndexPath);
 
     try {
       Files.createDirectories(collectionBasePath);
 
-      boolean isKeywordIndexCreated =
-          tantivyIndex.createIndex(keywordIndexPath.toString(), schemaBuilder.toJson());
+      boolean isKeywordIndexCreated = tantivyIndex.createIndex(schemaBuilder.toJson());
       if (!isKeywordIndexCreated) {
         cleanupCollectionDirectory(collectionBasePath);
         throw new CollectionException("Failed to create keyword index for collection: " + name);
@@ -158,8 +162,7 @@ public class CollectionManager {
               .build();
 
       saveCollectionMetadata(collectionBasePath, metadata);
-      IndexWriter indexWriter = new IndexWriter(keywordIndexPath.toString());
-      Collection collection = new Collection(keywordIndexPath.toString(), metadata, indexWriter);
+      Collection collection = new Collection(metadata, tantivyIndex, usearchIndex);
       collections.put(name, collection);
 
       log.info(
