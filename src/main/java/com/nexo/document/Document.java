@@ -73,8 +73,6 @@ public class Document {
     return Collections.unmodifiableMap(fields);
   }
 
-
-
   public String toJson(boolean prettyPrint) throws JsonProcessingException {
     return prettyPrint
         ? OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(this)
