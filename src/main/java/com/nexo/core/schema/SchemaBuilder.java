@@ -1,4 +1,4 @@
-package com.nexo.tantivy.schema;
+package com.nexo.core.schema;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;

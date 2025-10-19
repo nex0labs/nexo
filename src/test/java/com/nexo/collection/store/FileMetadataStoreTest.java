@@ -24,7 +24,7 @@ class FileMetadataStoreTest {
   @BeforeEach
   void setUp() throws IOException {
     tempDir = TempDirUtil.createTempDir();
-    store = new FileMetadataStore(tempDir.toString());
+    store = new FileMetadataStore(tempDir);
   }
 
   @AfterEach

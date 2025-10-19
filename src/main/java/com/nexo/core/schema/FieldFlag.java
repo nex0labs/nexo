@@ -1,4 +1,4 @@
-package com.nexo.tantivy.schema;
+package com.nexo.core.schema;
 
 public enum FieldFlag {
   INDEXED,

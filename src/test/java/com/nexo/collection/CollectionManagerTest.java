@@ -3,9 +3,9 @@ package com.nexo.collection;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.nexo.collection.store.FileMetadataStore;
+import com.nexo.core.schema.FieldFlag;
+import com.nexo.core.schema.SchemaBuilder;
 import com.nexo.exception.CollectionException;
-import com.nexo.tantivy.schema.FieldFlag;
-import com.nexo.tantivy.schema.SchemaBuilder;
 import com.nexo.testutil.TempDirUtil;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -22,8 +22,8 @@ class CollectionManagerTest {
   @BeforeEach
   void setUp() throws IOException {
     tempDir = TempDirUtil.createTempDir();
-    store = new FileMetadataStore(tempDir.toString());
-    collectionManager = new CollectionManager(store, tempDir.toString());
+    store = new FileMetadataStore(tempDir);
+    collectionManager = new CollectionManager(tempDir);
   }
 
   @AfterEach

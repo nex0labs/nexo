@@ -10,7 +10,6 @@ import com.nexo.exception.NexoException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -27,8 +26,8 @@ public class FileMetadataStore implements CollectionMetadataStore {
   private final ObjectMapper objectMapper;
   private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
-  public FileMetadataStore(String basePath) {
-    this.basePath = Paths.get(basePath);
+  public FileMetadataStore(Path basePath) {
+    this.basePath = basePath;
     this.objectMapper = new ObjectMapper();
     this.objectMapper.registerModule(new JavaTimeModule());
     this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);

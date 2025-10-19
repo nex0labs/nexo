@@ -1,7 +1,7 @@
 package com.nexo.collection;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.nexo.tantivy.schema.Field;
+import com.nexo.core.schema.Field;
 import java.time.Instant;
 import java.util.List;
 import lombok.AllArgsConstructor;
