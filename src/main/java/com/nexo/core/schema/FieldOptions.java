@@ -1,11 +1,14 @@
-package com.nexo.tantivy.schema;
+package com.nexo.core.schema;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
 
+@Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class FieldOptions {
+
   private final Boolean index;
   private final Boolean store;
   private final Boolean fast;
@@ -70,25 +73,5 @@ public final class FieldOptions {
 
   public FieldOptions indexRecordOption(String option) {
     return new FieldOptions(index, store, fast, tokenizer, option);
-  }
-
-  public Boolean getIndex() {
-    return index;
-  }
-
-  public Boolean getStore() {
-    return store;
-  }
-
-  public Boolean getFast() {
-    return fast;
-  }
-
-  public String getTokenizer() {
-    return tokenizer;
-  }
-
-  public String getIndexRecordOption() {
-    return indexRecordOption;
   }
 }

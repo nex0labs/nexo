@@ -5,18 +5,17 @@ import com.nexo.api.home.HomeController;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
-  private static final Logger logger = LoggerFactory.getLogger(HttpRequestHandler.class);
   private static final RequestRouter ROUTER = initRouter();
 
   private static RequestRouter initRouter() {
     RequestRouter router = new RequestRouter();
     router.registerController(new HomeController());
     router.registerController(new CollectionController());
-    logger.info("Registered routes: {}", router.getRegisteredRoutes());
+    log.info("Registered routes: {}", router.getRegisteredRoutes());
     return router;
   }
 
@@ -27,7 +26,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
 
   @Override
   public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-    logger.error("Request handling error", cause);
+    log.error("Request handling error", cause);
     ctx.close();
   }
 }

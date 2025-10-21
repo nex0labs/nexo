@@ -29,6 +29,7 @@ pub fn create_index<P: AsRef<Path>>(path: P, schema: &Schema) -> IndexResult<()>
     Ok(())
 }
 
+#[allow(dead_code)]
 pub fn delete_index<P: AsRef<Path>>(path: P) -> IndexResult<()> {
     match std::fs::remove_dir_all(path) {
         Ok(()) => Ok(()),
@@ -37,6 +38,7 @@ pub fn delete_index<P: AsRef<Path>>(path: P) -> IndexResult<()> {
     }
 }
 
+#[allow(dead_code)]
 pub fn index_exists<P: AsRef<Path>>(path: P) -> bool {
     let path = path.as_ref();
     path.exists() && path.join("meta.json").exists()

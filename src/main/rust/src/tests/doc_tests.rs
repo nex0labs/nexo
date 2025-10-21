@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
-    use crate::create_index;
     use crate::doc_writer::DocumentWriter;
+    use crate::index::create_index;
     use crate::tests::test_utils::{get_temp_path, DOC_TEST_SCHEMA};
     use serial_test::serial;
 

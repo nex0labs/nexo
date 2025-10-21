@@ -1,4 +1,4 @@
-package com.nexo.tantivy.utils;
+package com.nexo.core.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -97,8 +97,6 @@ public final class LoadNativeLibrary {
       return new OSInfo("lib", ".dylib", "mac", arch);
     } else if (osName.contains("linux")) {
       return new OSInfo("lib", ".so", "linux", arch);
-    } else if (osName.contains("windows")) {
-      return new OSInfo("", ".dll", "windows", arch);
     }
     throw new UnsupportedOperationException("Unsupported OS: " + osName + " (" + arch + ")");
   }
