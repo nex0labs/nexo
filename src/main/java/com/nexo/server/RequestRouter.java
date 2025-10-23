@@ -23,6 +23,9 @@ import lombok.extern.slf4j.Slf4j;
 public class RequestRouter {
 
   private static final ObjectMapper OBJECT_MAPPER = createOptimizedObjectMapper();
+  private static final jakarta.validation.ValidatorFactory VALIDATOR_FACTORY =
+      jakarta.validation.Validation.buildDefaultValidatorFactory();
+  private static final jakarta.validation.Validator VALIDATOR = VALIDATOR_FACTORY.getValidator();
 
   private final Map<String, RouteHandler> staticRoutes = new HashMap<>();
   private final List<RouteEntry> dynamicRoutes = new ArrayList<>();
@@ -104,21 +107,16 @@ public class RequestRouter {
             args[i] = requestContext;
           } else {
             String body = requestContext.getRequest().content().toString(CharsetUtil.UTF_8);
-            args[i] = OBJECT_MAPPER.readValue(body, paramType);
+            Object argument = OBJECT_MAPPER.readValue(body, paramType);
+            validateObject(argument, parameters[i]);
+
+            args[i] = argument;
           }
         }
 
         return method.invoke(controller, args);
       } catch (Exception e) {
-        Throwable cause =
-            e instanceof java.lang.reflect.InvocationTargetException ? e.getCause() : e;
-
-        if (cause instanceof NexoException) {
-          throw (NexoException) cause;
-        }
-
-        log.error("Error invoking controller method", cause);
-        throw NexoException.internalError("Error invoking controller method", cause);
+        throw handleException(e);
       }
     };
   }
@@ -154,12 +152,12 @@ public class RequestRouter {
     }
 
     boolean prettyPrint = queryStart >= 0 && uri.indexOf("pretty=true", queryStart) >= 0;
+    QueryParams queryParams = new QueryParams(uri);
 
     String routeKey = createRouteKey(method, path);
     RouteHandler staticHandler = staticRoutes.get(routeKey);
 
     if (staticHandler != null) {
-      QueryParams queryParams = new QueryParams(uri);
       RequestContext requestContext = new RequestContext(request, PathParams.EMPTY, queryParams);
 
       try {
@@ -177,8 +175,6 @@ public class RequestRouter {
         return;
       }
     }
-
-    QueryParams queryParams = new QueryParams(uri);
 
     for (RouteEntry entry : dynamicRoutes) {
       if (entry.pattern.matches(path, method)) {
@@ -263,5 +259,43 @@ public class RequestRouter {
         });
     allRoutes.addAll(dynamicRoutes.stream().map(entry -> entry.pattern).toList());
     return allRoutes;
+  }
+
+  private void validateObject(Object object, Parameter parameter) {
+    if (object == null || !parameter.isAnnotationPresent(jakarta.validation.Valid.class)) {
+      return;
+    }
+
+    Set<jakarta.validation.ConstraintViolation<Object>> violations = VALIDATOR.validate(object);
+
+    if (!violations.isEmpty()) {
+      String errors =
+          violations.stream()
+              .map(v -> v.getPropertyPath() + " " + v.getMessage())
+              .reduce((a, b) -> a + "; " + b)
+              .orElse("");
+      throw new jakarta.validation.ValidationException("Validation failed: " + errors);
+    }
+  }
+
+  private NexoException handleException(Exception e) {
+    Throwable cause = e instanceof java.lang.reflect.InvocationTargetException ? e.getCause() : e;
+
+    return switch (cause) {
+      case NexoException ne -> ne;
+      case IllegalArgumentException iae -> NexoException.badRequest(iae.getMessage());
+      case jakarta.validation.ValidationException ve -> NexoException.badRequest(ve.getMessage());
+      case com.fasterxml.jackson.databind.exc.InvalidFormatException ife -> {
+        String fieldName = ife.getPath().isEmpty() ? "field" : ife.getPath().get(0).getFieldName();
+        yield NexoException.badRequest(
+            String.format("Invalid value for %s: '%s'", fieldName, ife.getValue()));
+      }
+      case com.fasterxml.jackson.core.JsonProcessingException jpe ->
+          NexoException.badRequest("Invalid JSON: " + jpe.getMessage());
+      default -> {
+        log.error("Error invoking controller method", cause);
+        yield NexoException.internalError("Error invoking controller method", cause);
+      }
+    };
   }
 }

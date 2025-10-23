@@ -38,10 +38,10 @@ public class Field {
       return null;
     }
     return new FieldOptions(
-        original.getIndex(),
-        original.getStore(),
-        original.getFast(),
-        original.getTokenizer(),
-        original.getIndexRecordOption());
+        original.indexed(),
+        original.stored(),
+        original.fast(),
+        original.tokenizer(),
+        original.indexRecordOption());
   }
 }

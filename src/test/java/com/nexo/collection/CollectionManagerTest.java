@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.nexo.collection.store.FileMetadataStore;
 import com.nexo.core.schema.FieldFlag;
+import com.nexo.core.schema.FieldType;
 import com.nexo.core.schema.SchemaBuilder;
 import com.nexo.exception.CollectionException;
 import com.nexo.testutil.TempDirUtil;
@@ -35,11 +36,8 @@ class CollectionManagerTest {
 
   public static SchemaBuilder getTestSchema() {
     SchemaBuilder schemaBuilder = new SchemaBuilder();
-    schemaBuilder
-        .addTextField("id", "default", FieldFlag.INDEXED, FieldFlag.STORED)
-        .addTextField("title", "default", FieldFlag.INDEXED, FieldFlag.STORED)
-        .addTextField("content", "default", FieldFlag.INDEXED)
-        .addTextField("url", "raw", FieldFlag.STORED);
+    schemaBuilder.addField("title", FieldType.TEXT, FieldFlag.INDEXED, FieldFlag.STORED);
+    schemaBuilder.addField("content", FieldType.TEXT, FieldFlag.INDEXED);
     return schemaBuilder;
   }
 
