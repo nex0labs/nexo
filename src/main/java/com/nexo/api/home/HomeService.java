@@ -6,9 +6,9 @@ import java.util.Properties;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Getter
-public class VersionService {
+@Slf4j
+public class HomeService {
 
   private static final String VERSION_PROPERTIES = "version.properties";
   private static final String DEFAULT_VERSION = "unknown";
@@ -17,14 +17,16 @@ public class VersionService {
   private final String artifactId;
   private final String groupId;
   private final String buildTimestamp;
+  private final String tantivyVersion;
 
-  public VersionService() {
+  public HomeService() {
     Properties properties = loadVersionProperties();
 
     this.version = properties.getProperty("version", DEFAULT_VERSION);
     this.artifactId = properties.getProperty("artifact.id", "nexo");
     this.groupId = properties.getProperty("group.id", "com.nexo");
     this.buildTimestamp = properties.getProperty("build.timestamp", "unknown");
+    this.tantivyVersion = properties.getProperty("tantivy.version", DEFAULT_VERSION);
 
     log.info("Loaded version info: {} v{}", artifactId, version);
   }

@@ -11,15 +11,27 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HomeResponse {
-  @JsonProperty("status")
+  @JsonProperty("name")
   private String status;
 
+  @JsonProperty("tagline")
+  private String tagline;
+
   @JsonProperty("version")
-  private String version;
+  private VersionInfo version;
 
-  @JsonProperty("timestamp")
-  private long timestamp;
+  @JsonProperty("build-timestamp")
+  private String buildTimestamp;
 
-  @JsonProperty("uptime")
-  private long uptime;
+  @Getter
+  @Setter
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class VersionInfo {
+    @JsonProperty("nexo")
+    private String nexo;
+
+    @JsonProperty("tantivy")
+    private String tantivy;
+  }
 }
