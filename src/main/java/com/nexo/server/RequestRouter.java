@@ -286,9 +286,13 @@ public class RequestRouter {
       case IllegalArgumentException iae -> NexoException.badRequest(iae.getMessage());
       case jakarta.validation.ValidationException ve -> NexoException.badRequest(ve.getMessage());
       case com.fasterxml.jackson.databind.exc.InvalidFormatException ife -> {
-        String fieldName = ife.getPath().isEmpty() ? "field" : ife.getPath().get(0).getFieldName();
+        String fieldPath = buildFieldPath(ife);
+        String targetType =
+            ife.getTargetType() != null ? ife.getTargetType().getSimpleName() : "unknown";
         yield NexoException.badRequest(
-            String.format("Invalid value for %s: '%s'", fieldName, ife.getValue()));
+            String.format(
+                "Invalid value '%s' for field '%s'. Expected type: %s",
+                ife.getValue(), fieldPath, targetType));
       }
       case com.fasterxml.jackson.core.JsonProcessingException jpe ->
           NexoException.badRequest("Invalid JSON: " + jpe.getMessage());
@@ -297,5 +301,28 @@ public class RequestRouter {
         yield NexoException.internalError("Error invoking controller method", cause);
       }
     };
+  }
+
+  private String buildFieldPath(com.fasterxml.jackson.databind.exc.InvalidFormatException ife) {
+    if (ife.getPath().isEmpty()) {
+      return "unknown";
+    }
+
+    StringBuilder path = new StringBuilder();
+    for (int i = 0; i < ife.getPath().size(); i++) {
+      var ref = ife.getPath().get(i);
+      if (i > 0) {
+        if (ref.getIndex() >= 0) {
+          path.append("[").append(ref.getIndex()).append("]");
+        } else {
+          path.append(".");
+        }
+      }
+      if (ref.getFieldName() != null) {
+        path.append(ref.getFieldName());
+      }
+    }
+
+    return path.toString();
   }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.nexo.config.NexoConfig;
 import com.nexo.core.index.TantivyIndex;
 import com.nexo.core.index.UsearchIndex;
 import com.nexo.core.schema.SchemaBuilder;
@@ -38,11 +39,9 @@ public class CollectionManager {
   private final Path basePath;
   private final ObjectMapper objectMapper;
 
-  public CollectionManager(Path basePath) {
-    if (basePath == null) {
-      throw new IllegalArgumentException("Base path cannot be null");
-    }
-    this.basePath = basePath;
+  public CollectionManager() {
+
+    this.basePath = Path.of(NexoConfig.getInstance().getIndexPath());
     this.objectMapper = new ObjectMapper();
     this.objectMapper.registerModule(new JavaTimeModule());
     this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
