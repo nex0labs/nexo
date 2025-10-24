@@ -23,16 +23,18 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CollectionManager {
 
-    // This should be the source of truth for collections
+  // This should be the source of truth for collections
   private static volatile CollectionManager instance;
   private static final Object LOCK = new Object();
 
   private final Map<CollectionName, Collection> collections = new ConcurrentHashMap<>();
-    /**
-     * Maximum number of collections allowed per instance. This is a hard limit to prevent resource
-     * exhaustion.
-     */
+
+  /**
+   * Maximum number of collections allowed per instance. This is a hard limit to prevent resource
+   * exhaustion.
+   */
   private static final int TOTAL_NUMBER_OF_COLLECTIONS = 100;
+
   private static final String COLLECTION_METADATA_FILE = "collection.json";
   private static final String KEYWORD_INDEX_DIR = "index";
   private static final String VECTOR_INDEX = "vectors";
