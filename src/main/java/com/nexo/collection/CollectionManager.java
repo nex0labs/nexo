@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.nexo.config.NexoConfig;
 import com.nexo.core.index.TantivyIndex;
 import com.nexo.core.index.UsearchIndex;
 import com.nexo.core.schema.SchemaBuilder;
@@ -23,6 +24,9 @@ import lombok.extern.slf4j.Slf4j;
 public class CollectionManager {
 
   // This should be the source of truth for collections
+  private static volatile CollectionManager instance;
+  private static final Object LOCK = new Object();
+
   private final Map<CollectionName, Collection> collections = new ConcurrentHashMap<>();
 
   /**
@@ -33,21 +37,33 @@ public class CollectionManager {
 
   private static final String COLLECTION_METADATA_FILE = "collection.json";
   private static final String KEYWORD_INDEX_DIR = "index";
-  private static final String VECTOR_INDEX = "vectors";
+  private static final String VECTOR_INDEX = "vectors.nexo";
 
   private final Path basePath;
   private final ObjectMapper objectMapper;
 
-  public CollectionManager(Path basePath) {
-    if (basePath == null) {
-      throw new IllegalArgumentException("Base path cannot be null");
-    }
+  private CollectionManager() {
+    this(Path.of(NexoConfig.getInstance().getIndexPath()));
+  }
+
+  CollectionManager(Path basePath) {
     this.basePath = basePath;
     this.objectMapper = new ObjectMapper();
     this.objectMapper.registerModule(new JavaTimeModule());
     this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
     this.objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     loadAllCollections();
+  }
+
+  public static CollectionManager getInstance() {
+    if (instance == null) {
+      synchronized (LOCK) {
+        if (instance == null) {
+          instance = new CollectionManager();
+        }
+      }
+    }
+    return instance;
   }
 
   private void loadAllCollections() {
