@@ -37,7 +37,7 @@ public class CollectionManager {
 
   private static final String COLLECTION_METADATA_FILE = "collection.json";
   private static final String KEYWORD_INDEX_DIR = "index";
-  private static final String VECTOR_INDEX = "vectors";
+  private static final String VECTOR_INDEX = "vectors.nexo";
 
   private final Path basePath;
   private final ObjectMapper objectMapper;
