@@ -1,9 +1,8 @@
-package com.nexo.core.index;
+package com.nexo.index;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.nexo.core.utils.LoadNativeLibrary;
 import com.nexo.document.Document;
-import com.nexo.document.DocumentWriter;
+import com.nexo.utils.LoadNativeLibrary;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
@@ -12,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @Slf4j
-public class TantivyIndex implements DocumentWriter {
+public class TantivyIndex implements NexoIndex {
 
   static {
     try {
@@ -80,7 +79,7 @@ public class TantivyIndex implements DocumentWriter {
 
     long handle = getIndexWriter();
     try {
-      addDocumentNative(handle, doc.toJson(false));
+      addDocumentNative(handle, doc.toJsonString(false));
     } catch (Exception e) {
       log.error("Failed to add document", e);
       throw e;
@@ -88,7 +87,26 @@ public class TantivyIndex implements DocumentWriter {
   }
 
   @Override
-  public void addDocuments(List<Document> docs) {}
+  public void addDocuments(List<Document> docs) throws JsonProcessingException {
+    if (docs == null || docs.isEmpty()) {
+      log.debug("No documents to add");
+      return;
+    }
+
+    ensureNotClosed();
+    long handle = getIndexWriter();
+
+    try {
+      for (Document doc : docs) {
+        Objects.requireNonNull(doc, "Document cannot be null");
+        addDocumentNative(handle, doc.toJsonString(false));
+      }
+      log.debug("Added {} documents", docs.size());
+    } catch (Exception e) {
+      log.error("Failed to add documents batch", e);
+      throw e;
+    }
+  }
 
   public void commit() {
     ensureNotClosed();

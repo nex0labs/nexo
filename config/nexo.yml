@@ -3,7 +3,7 @@ serverPort: 9090
 workerThreads: 4
 searchThreads: 4
 maxContentLength: 1048576
-indexPath: "data/index"
+indexPath: "./data"
 clusterName: "nexo-cluster"
 nodeName: "nexo-node-1"
 

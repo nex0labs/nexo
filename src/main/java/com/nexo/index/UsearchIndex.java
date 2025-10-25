@@ -1,4 +1,4 @@
-package com.nexo.core.index;
+package com.nexo.index;
 
 import cloud.unum.usearch.Index;
 import com.nexo.config.NexoConfig;

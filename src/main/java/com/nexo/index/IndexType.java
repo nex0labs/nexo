@@ -1,4 +1,4 @@
-package com.nexo.core.index;
+package com.nexo.index;
 
 public enum IndexType {
   KEYWORD,

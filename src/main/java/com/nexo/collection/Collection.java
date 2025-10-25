@@ -1,7 +1,7 @@
 package com.nexo.collection;
 
-import com.nexo.core.index.TantivyIndex;
-import com.nexo.core.index.UsearchIndex;
+import com.nexo.index.TantivyIndex;
+import com.nexo.index.UsearchIndex;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
