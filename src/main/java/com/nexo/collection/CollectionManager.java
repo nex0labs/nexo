@@ -5,10 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.nexo.config.NexoConfig;
-import com.nexo.core.index.TantivyIndex;
-import com.nexo.core.index.UsearchIndex;
-import com.nexo.core.schema.SchemaBuilder;
 import com.nexo.exception.CollectionException;
+import com.nexo.index.TantivyIndex;
+import com.nexo.index.UsearchIndex;
+import com.nexo.schema.SchemaBuilder;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -155,7 +155,7 @@ public class CollectionManager {
     try {
       Files.createDirectories(collectionBasePath);
 
-      boolean isKeywordIndexCreated = tantivyIndex.createIndex(schemaBuilder.toJson());
+      boolean isKeywordIndexCreated = tantivyIndex.createIndex(schemaBuilder.toJsonString());
       if (!isKeywordIndexCreated) {
         cleanupCollectionDirectory(collectionBasePath);
         throw new CollectionException("Failed to create keyword index for collection: " + name);

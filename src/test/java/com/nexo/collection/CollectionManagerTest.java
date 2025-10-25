@@ -3,11 +3,9 @@ package com.nexo.collection;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.nexo.collection.store.FileMetadataStore;
-import com.nexo.core.schema.FieldFlag;
-import com.nexo.core.schema.FieldType;
-import com.nexo.core.schema.SchemaBuilder;
 import com.nexo.exception.CollectionException;
 import com.nexo.testutil.TempDirUtil;
+import com.nexo.testutil.TestSchemaUtils;
 import java.io.IOException;
 import java.nio.file.Path;
 import org.junit.jupiter.api.AfterEach;
@@ -34,17 +32,10 @@ class CollectionManagerTest {
     }
   }
 
-  public static SchemaBuilder getTestSchema() {
-    SchemaBuilder schemaBuilder = new SchemaBuilder();
-    schemaBuilder.addField("title", FieldType.TEXT, FieldFlag.INDEXED, FieldFlag.STORED);
-    schemaBuilder.addField("content", FieldType.TEXT, FieldFlag.INDEXED);
-    return schemaBuilder;
-  }
-
   @Test
   void testCreateCollection() {
     CollectionName name = CollectionName.of("test-collection");
-    collectionManager.createCollection(name, getTestSchema());
+    collectionManager.createCollection(name, TestSchemaUtils.getTestSchema());
 
     assertTrue(collectionManager.collectionExists(name));
     assertNotNull(collectionManager.getCollection(name));
@@ -53,10 +44,11 @@ class CollectionManagerTest {
   @Test
   void testCreateDuplicateCollection() {
     CollectionName name = CollectionName.of("test-collection");
-    collectionManager.createCollection(name, getTestSchema());
+    collectionManager.createCollection(name, TestSchemaUtils.getTestSchema());
 
     assertThrows(
-        CollectionException.class, () -> collectionManager.createCollection(name, getTestSchema()));
+        CollectionException.class,
+        () -> collectionManager.createCollection(name, TestSchemaUtils.getTestSchema()));
   }
 
   @Test

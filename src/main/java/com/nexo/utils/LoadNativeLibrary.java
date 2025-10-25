@@ -1,4 +1,4 @@
-package com.nexo.core.utils;
+package com.nexo.utils;
 
 import java.io.IOException;
 import java.io.InputStream;

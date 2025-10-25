@@ -1,9 +1,10 @@
-package com.nexo.document;
+package com.nexo.index;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nexo.document.Document;
 import java.util.List;
 
-public interface DocumentWriter extends AutoCloseable {
+public interface NexoIndex extends AutoCloseable {
 
   void addDocument(Document doc) throws JsonProcessingException;
 

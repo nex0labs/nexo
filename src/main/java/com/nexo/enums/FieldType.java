@@ -1,4 +1,4 @@
-package com.nexo.core.schema;
+package com.nexo.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 

@@ -1,8 +1,9 @@
-package com.nexo.core.schema;
+package com.nexo.schema;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.nexo.enums.FieldType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,7 +16,7 @@ public class Field {
 
   private String name;
 
-  private FieldOptions options;
+  private Object options;
 
   private FieldType type;
 
@@ -23,25 +24,9 @@ public class Field {
   public Field(
       @JsonProperty("name") String name,
       @JsonProperty("type") FieldType type,
-      @JsonProperty("options") FieldOptions options) {
+      @JsonProperty("options") Object options) {
     this.name = name;
     this.type = type;
-    this.options = copyFieldOptions(options);
-  }
-
-  public FieldOptions getOptions() {
-    return copyFieldOptions(options);
-  }
-
-  private FieldOptions copyFieldOptions(FieldOptions original) {
-    if (original == null) {
-      return null;
-    }
-    return new FieldOptions(
-        original.indexed(),
-        original.stored(),
-        original.fast(),
-        original.tokenizer(),
-        original.indexRecordOption());
+    this.options = options;
   }
 }
