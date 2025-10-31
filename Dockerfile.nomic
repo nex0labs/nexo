@@ -1,0 +1,14 @@
+FROM ollama/ollama:latest
+
+EXPOSE 11434
+
+RUN echo '#!/bin/bash\n\
+ollama serve &\n\
+OLLAMA_PID=$!\n\
+sleep 5\n\
+echo "Pulling nomic-embed-text model..."\n\
+ollama pull nomic-embed-text\n\
+echo "Model ready!"\n\
+wait $OLLAMA_PID' > /start.sh && chmod +x /start.sh
+
+ENTRYPOINT ["/start.sh"]

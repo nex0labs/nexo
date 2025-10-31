@@ -93,8 +93,6 @@ public class Document {
 
     public DocumentBuilder field(String name, Object value) {
       validateFieldValue(value);
-
-      // Handle both "id" and "_id" as document ID
       if ("id".equals(name) && value instanceof String) {
         return id((String) value);
       }

@@ -8,7 +8,7 @@ public class TestSchemaUtils {
   public static SchemaBuilder getTestSchema() {
     SchemaBuilder schemaBuilder = new SchemaBuilder();
     schemaBuilder.addTextField("title");
-    schemaBuilder.addTextField("content");
+    schemaBuilder.addTextField("content", true);
     schemaBuilder.addNumericField("views", FieldType.I64);
     return schemaBuilder;
   }

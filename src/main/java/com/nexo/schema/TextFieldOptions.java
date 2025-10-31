@@ -18,11 +18,15 @@ public class TextFieldOptions extends DefaultOptions {
   @JsonProperty("indexing")
   private Indexing indexing;
 
+  @JsonProperty("vector")
+  private Boolean vector;
+
   public TextFieldOptions() {
     super();
     setPrecision(null);
     setIndexed(null);
     setFieldNorm(null);
+    this.vector = false;
   }
 
   @Getter

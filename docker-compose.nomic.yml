@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  nomic-embed:
+    build:
+      context: .
+      dockerfile: Dockerfile.nomic
+    container_name: nomic-embedding
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+volumes:
+  ollama_data:
+    driver: local

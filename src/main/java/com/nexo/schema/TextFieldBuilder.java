@@ -50,6 +50,11 @@ public class TextFieldBuilder {
     return this;
   }
 
+  public TextFieldBuilder vector(boolean vector) {
+    options.setVector(vector);
+    return this;
+  }
+
   public Field build() {
     return new Field(name, FieldType.TEXT, options);
   }

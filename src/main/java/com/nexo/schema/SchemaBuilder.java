@@ -57,6 +57,17 @@ public class SchemaBuilder {
     }.build();
   }
 
+  public void addTextField(String name, boolean isVector) {
+    new TextFieldBuilder(name) {
+      @Override
+      public Field build() {
+        Field field = super.build();
+        schemaFields.add(field);
+        return field;
+      }
+    }.vector(isVector).build();
+  }
+
   public void addNumericField(String name, FieldType type) {
     switch (type) {
       case I64, F64, U64 -> {

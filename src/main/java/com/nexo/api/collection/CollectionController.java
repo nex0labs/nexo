@@ -9,7 +9,7 @@ import jakarta.validation.Valid;
 public class CollectionController {
 
   @Route(method = HttpMethod.POST)
-  public CollectionRequest create(@Valid CollectionRequest collectionRequest) {
+  public RequestEntity<CollectionRequest> create(@Valid CollectionRequest collectionRequest) {
     if (collectionRequest.getFields() != null) {
       for (FieldRequest field : collectionRequest.getFields()) {
         field.validate();
@@ -17,6 +17,19 @@ public class CollectionController {
     }
 
     // TODO: Implement create collection logic
-    return collectionRequest;
+
+    // Example usage patterns:
+    // Simple success response
+    return RequestEntity.created(collectionRequest);
+
+    // With custom headers
+    // return RequestEntity.builder()
+    //     .statusCode(201)
+    //     .header("Location", "/collections/" + collectionRequest.getName())
+    //     .body(collectionRequest);
+
+    // Error responses
+    // return RequestEntity.badRequest("Invalid collection configuration");
+    // return RequestEntity.notFound();
   }
 }

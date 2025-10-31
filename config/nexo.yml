@@ -15,6 +15,10 @@ vectorIndex:
   expansionSearch: 200
   quantization: "f32"
 
+embedding:
+  model: "nomic"
+  url: "http://localhost:11434"
+
 keywordIndex:
   defaultAnalyzer: "standard"
   stemming: true
